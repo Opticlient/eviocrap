@@ -1,0 +1,50 @@
+{
+ "name": "Opticlient",
+ "version": "2.3.3",
+ "description": "Adds features, fixes problems & optimizes the game. Made for ev.io!",
+ "manifest_version": 3,
+ "content_scripts": [
+  {
+   "matches": [
+    "https://ev.io/*",
+    "https://ev.io/*?*",
+    "https://staging.ev.io/*",
+    "https://staging.ev.io/*?*"
+   ],
+   "run_at": "document_start",
+   "js": [
+    "b.js"
+   ]
+  },
+  {
+   "matches": [
+    "https://ev.io/",
+    "https://ev.io/?*",
+    "https://staging.ev.io/",
+    "https://staging.ev.io/?*"
+   ],
+   "run_at": "document_start",
+   "js": [
+    "a.js"
+   ]
+  },
+  {
+   "matches": [
+    "https://ev.io/user/login",
+    "https://ev.io/user/login?*",
+    "https://staging.ev.io/user/login",
+    "https://staging.ev.io/user/login?*"
+   ],
+   "run_at": "document_start",
+   "js": [
+    "c.js"
+   ]
+  }
+ ],
+ "icons": {
+  "16": "i.png",
+  "32": "i.png",
+  "48": "i.png",
+  "128": "i.png"
+ }
+}

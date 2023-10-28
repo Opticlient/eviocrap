@@ -1,0 +1,1 @@
+_=document.documentElement.style;_.backgroundColor="#000";_.visibility="hidden";addEventListener("load",()=>_.backgroundColor=_.visibility="")

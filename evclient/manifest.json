@@ -1,0 +1,28 @@
+{
+  "name": "ev client (unsupported)",
+  "version": "4.6.4",
+  "description": "This is no longer supported. I currently maintain Opticlient.",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches":["https://ev.io/*","https://ev.io/*?*","https://staging.ev.io/*","https://staging.ev.io/*?*"],
+      "run_at":"document_start",
+      "js": [
+        "b.js"
+      ]
+    },
+    {
+      "matches":["https://ev.io/","https://ev.io/?*","https://staging.ev.io/","https://staging.ev.io/?*"],
+      "run_at":"document_start",
+      "js": [
+        "a.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "i.png",
+    "32": "i.png",
+    "48": "i.png",
+    "128": "i.png"
+  }
+}
