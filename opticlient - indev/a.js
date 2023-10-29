@@ -725,7 +725,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
      localStorage.setItem("opticlient-april-fools2", 1);
      setInterval(() => location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1000 * 30);
      location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    }, (Math.random() * 1000 * 20) + (1000 * 10));
+    }, 1000 * 6);
    }, { once: true });
   };
  } else {
