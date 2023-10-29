@@ -704,6 +704,32 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
 })();
 
+//april fools
+(() => {
+ if ((new Date() + "").includes("Apr 01")) {
+  const proceed = localStorage.getItem("opticlient-april-fools") - 0;
+  if (!proceed) {
+   const process = setInterval(() => {
+    if (Math.random() < 0.1) {
+     localStorage.setItem("opticlient-april-fools", Date.now() + (1000 * 60 * 5));
+     clearInterval(process);
+     location.href = location.origin + "/maintenance";
+     setInterval(() => location.origin + "/maintenance", 1000 * 30);
+    } 
+   }, 1000 * 60);
+  } else if (Date.now() < proceed) {
+   location.href = location.origin + "/maintenance";
+  } else if (!localStorage.getItem("opticlient-april-fools2")) {
+   localStorage.setItem("opticlient-april-fools2", 1);
+   location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+   setInterval(() => location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1000 * 30);
+  };
+ } else {
+  localStorage.removeItem("opticlient-april-fools");
+  localStorage.removeItem("opticlient-april-fools2");
+ };
+})();
+
 //hide hands (DO NOT DISTRIBUTE!!! (hands are still visible sometimes))
 (() => {
  return;
