@@ -704,8 +704,9 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
 })();
 
-//april fools
+//april fools (DO NOT DISTRIBUTE!!! (funny but it might scare some users into uninstalling))
 (() => {
+ return;
  if ((new Date() + "").includes("Apr 01")) {
   const proceed = localStorage.getItem("opticlient-april-fools") - 0;
   if (!proceed) {
