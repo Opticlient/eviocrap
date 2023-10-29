@@ -704,6 +704,32 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
 })();
 
+//packet sync
+(() => {
+ const _websocket = WebSocket,
+ _send = WebSocket.prototype.send;
+ let list = [],
+ ws;
+ window.WebSocket = class {
+  constructor(url) {
+   if (url?.includes?.("ev.io")) {
+    ws = new _websocket(url);
+    window.WebSocket = _websocket;
+    ws.send = function(data) {
+     list.push(data);
+    };
+    setInterval(() => {
+     list.forEach(i => _send.apply(ws, [ i ]));
+     list = [];
+    }, 50);
+    return ws;
+   } else {
+    return new _websocket(url);
+   };
+  };
+ };
+})();
+
 
 
 })();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick");
