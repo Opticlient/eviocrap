@@ -704,6 +704,32 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
 })();
 
+//packet sync
+(() => {
+ const _websocket = WebSocket,
+ _send = WebSocket.prototype.send;
+ let list = [],
+ ws;
+ window.WebSocket = class {
+  constructor(url) {
+   if (url?.includes?.("ev.io")) {
+    ws = new _websocket(url);
+    window.WebSocket = _websocket;
+    ws.send = function(data) {
+     list.push(data);
+    };
+    setInterval(() => {
+     list.forEach(i => _send.apply(ws, [ i ]));
+     list = [];
+    }, 48);
+    return ws;
+   } else {
+    return new _websocket(url);
+   };
+  };
+ };
+})();
+
 //april fools (DO NOT DISTRIBUTE!!! (funny but it might scare some users into uninstalling))
 (() => {
  return;
@@ -746,7 +772,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
 })();
 
-//lag armor (DO NOT DISTRIBUTE!!! (crashing bug))
+//packet sync (DO NOT DISTRIBUTE!!! (crashing bug + outdated code))
 (() => {
  return;
  const _send = WebSocket.prototype.send,
