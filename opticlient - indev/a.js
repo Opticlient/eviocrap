@@ -720,13 +720,11 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
   } else if (Date.now() < proceed) {
    location.href = location.origin + "/maintenance";
   } else if (!localStorage.getItem("opticlient-april-fools2")) {
-   window.addEventListener("load", () => {
-    setTimeout(() => {
-     localStorage.setItem("opticlient-april-fools2", 1);
-     setInterval(() => location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1000 * 30);
-     location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    }, 1000 * 6);
-   }, { once: true });
+   window.addEventListener("load", () => setTimeout(() => {
+    localStorage.setItem("opticlient-april-fools2", 1);
+    setInterval(() => location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1000 * 30);
+    location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+   }, 1000 * 6), { once: true });
   };
  } else {
   localStorage.removeItem("opticlient-april-fools");
