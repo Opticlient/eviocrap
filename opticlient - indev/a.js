@@ -715,7 +715,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
      clearInterval(process);
      setInterval(() => location.origin + "/maintenance", 1000 * 30);
      location.href = location.origin + "/maintenance";
-    } 
+    };
    }, 1000 * 60);
   } else if (Date.now() < proceed) {
    location.href = location.origin + "/maintenance";
