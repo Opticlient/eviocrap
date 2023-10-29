@@ -720,7 +720,6 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
     };
     setInterval(() => {
      list.forEach(i => _send.apply(ws, [ i ]));
-     if (list.length > 1) console.log2(list.length);
      list = [];
     }, 50);
     return ws;
