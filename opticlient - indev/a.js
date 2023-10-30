@@ -708,10 +708,10 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
 (() => {
  const _websocket = WebSocket,
  _send = WebSocket.prototype.send;
- let send = [],
- reply = [],
- ws,
- msg;
+ let reply = [],
+ send = [],
+ msg = doNothing,
+ ws;
  window.WebSocket = class {
   constructor(url) {
    if (url?.includes?.("ev.io")) {
@@ -727,9 +727,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
       ws.addEventListener("message", e => reply.push(e));
       Object.defineProperty(ws, "onmessage", {
        get: () => msg,
-       set: _msg => {
-        msg = _msg;
-       },
+       set: _msg => msg = _msg,
       });
      },
      configurable: true,
