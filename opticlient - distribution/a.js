@@ -9,10 +9,12 @@ window.client = true;
 (() => {
  if (!localStorage.getItem("opticlient")) {
   localStorage.setItem("opticlient", JSON.stringify({
-   zoomKeybind: "p",
-   fov: 60,
-   v: 9,
-   zoomType: 0,
+   zoom: {
+    keybind: "p",
+    type: 0,
+    fov: 60,
+   },
+   v: 10,
   }));
  };
 })();
@@ -50,6 +52,18 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   didVersionChange = true;
   ls.v = 9;
   delete ls.hh;
+ };
+ if (ls.v === 9) {
+  didVersionChange = true;
+  ls.v = 10;
+  ls.zoom = {
+   keybind: ls.zoomKeybind,
+   type: ls.zoomType,
+   fov: ls.fov,
+  };
+  delete ls.zoomKeybind;
+  delete ls.zoomType;
+  delete ls.fov;
  };
  if (didVersionChange) saveData();
 })();
@@ -106,19 +120,19 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //zoom keybind
 (() => {
- let zoomKeybind = ls.zoomKeybind;
+ let zoomKeybind = ls.zoom.keybind;
  const keybindCallback = e => {
   if (e.type === "mousedown") {
    e.preventDefault();
    e = e.button;
-   ls.zoomKeybind = zoomKeybind = e;
-   ls.zoomType = 1;
+   ls.zoom.keybind = zoomKeybind = e;
+   ls.zoom.type = 1;
    saveData();
    set_zoom_display.innerText = "MOUSE" + e;
   } else {
    e = e.key;
-   ls.zoomKeybind = zoomKeybind = e.toLowerCase();
-   ls.zoomType = 0;
+   ls.zoom.keybind = zoomKeybind = e.toLowerCase();
+   ls.zoom.type = 0;
    saveData();
    set_zoom_display.innerText = e.toUpperCase();
   };
@@ -132,7 +146,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   window.removeEventListener("keyup", zoomKeyup);
   window.removeEventListener("mousedown", zoomMousedown);
   window.removeEventListener("mouseup", zoomMouseup);
-  if (ls.zoomType) {
+  if (ls.zoom.type) {
    window.addEventListener("mousedown", zoomMousedown);
    window.addEventListener("mouseup", zoomMouseup);
   } else {
@@ -166,7 +180,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
  let fov,
  camera,
- alternative = ls.fov,
+ alternative = ls.zoom.fov,
  intercept = false;
  Object.defineProperty(window, "THREE", {
   get: doNothing,
@@ -235,13 +249,13 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
       set_zoom_display.innerText = "awaiting input... press any key...";
       e.preventDefault();
      };
-     if (ls.zoomType) {
+     if (ls.zoom.type) {
       set_zoom_display.innerText = "MOUSE" + zoomKeybind;
      } else {
       set_zoom_display.innerText = zoomKeybind.toUpperCase();
      };
      zoom_keybind.addEventListener("input", () => {
-      zoom_keybind_label.children[0].innerText = ls.fov = alternative = ~~zoom_keybind.value;
+      zoom_keybind_label.children[0].innerText = ls.zoom.fov = alternative = ~~zoom_keybind.value;
       saveData();
      });
     };
@@ -380,7 +394,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 //disabled capslock
 (() => {
  window.addEventListener("load", () => {
-  chat_input.addEventListener("keydown", function(e) {
+  document.querySelector("#chat_input")?.addEventListener?.("keydown", function(e) {
    if (e.getModifierState("CapsLock") && !e.ctrlKey && e.key.length === 1) {
     if (e.shiftKey) {
      e.preventDefault();
