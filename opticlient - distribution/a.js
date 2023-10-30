@@ -5,8 +5,6 @@ let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
 if (window.client) return (s => alert(s + " is not compatible with other clients. " + s + " no es compatible con otros clientes. " + s + " não é compatível com outros clientes. " + s + " несовместим с другими клиентами. " + s + " 與其他客戶端不相容。"))("Opticlient");
 window.client = true;
 
-const doNothing = function() {};
-
 //version control for opticlient (1 / 3)
 (() => {
  if (!localStorage.getItem("opticlient")) {
@@ -19,8 +17,9 @@ const doNothing = function() {};
  };
 })();
 
-const ls = JSON.parse(localStorage.getItem("opticlient")),
-saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
+const doNothing = function() {},
+saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls)),
+ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //version control for opticlient (2 / 3)
 (() => {
@@ -59,9 +58,9 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
 (() => {
  const doc = document.createElement;
  document.createElement = function(i) {
-  let f = doc.apply(this, arguments);
+  const f = doc.apply(this, arguments);
   if (i.toLowerCase() === "script") {
-   f.__defineSetter__("src", doNothing);
+   Object.defineProperty(f, "src", { value: "" });
    f.setAttribute = doNothing;
   };
   return f;
@@ -99,7 +98,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
   },
  });
  window.addEventListener("load", () => {
-  let element = document.createElement("style");
+  const element = document.createElement("style");
   element.innerText = "img{image-rendering:pixelated}";
   document.head.appendChild(element);
  }, { once: true });
@@ -250,7 +249,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
   };
  };
  window.addEventListener("load", () => {
-  let button = document.querySelector("#settings_button");
+  const button = document.querySelector("#settings_button");
   if (button === null) return;
   button.addEventListener("click", () => {
    if (!changing) {
@@ -265,7 +264,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
 
 //fixed a memory leak (2 / 2)
 (() => {
- let queue = [];
+ const queue = [];
  window.setTimeout = function(callback, timeout) {
   if (typeof callback === "string") {
    const _callback = callback;
@@ -287,7 +286,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
  };
  let prev = performance.now();
  setInterval(() => {
-  let current = performance.now(),
+  const current = performance.now(),
   delta = current + (current - prev);
   prev = current;
   for (let index = 0, length = queue.length; index < length; index++) {
@@ -330,7 +329,8 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
   survival_earn: "Survival (earn)",
  },
  private_game_modes_string = (() => {
-  let output = [], name;
+  const output = [];
+  let name;
   output.push("Battle Royale");
   for (name in private_game_modes) {
    name = name.split("_");
@@ -357,12 +357,12 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
    };
   };
   priv_game.addEventListener("click", () => {
-   let loop = () => {
-    let menu = document.querySelector("#select_game_mode_select");
+   const loop = () => {
+    const menu = document.querySelector("#select_game_mode_select");
     if (menu) {
      Object.entries(private_game_modes).forEach(item => {
       if (!menu.querySelector("[value=" + item[0] + "]")) {
-       let option = document.createElement("option");
+       const option = document.createElement("option");
        option.value = item[0];
        option.innerText = item[1];
        menu.appendChild(option);
@@ -526,7 +526,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
   let button = document.querySelector("#login_button");
   if (button) {
    button.addEventListener("click", () => {
-    let time = document.querySelector("#time_icon");
+    const time = document.querySelector("#time_icon");
     if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
      if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
       sessionStorage.setItem("opticlient-continue", "?game=" + last_match);
@@ -539,7 +539,7 @@ saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls));
    button = document.querySelector("#logout_button");
    if (button) {
     button.addEventListener("click", () => {
-     let time = document.querySelector("#time_icon");
+     const time = document.querySelector("#time_icon");
      if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
       if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
        sessionStorage.setItem("opticlient-continue2", "?game=" + last_match);
