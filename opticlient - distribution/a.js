@@ -720,20 +720,15 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //packet sync
 (() => {
- const _websocket = WebSocket,
- _send = WebSocket.prototype.send;
+ const _websocket = WebSocket;
  let reply = [],
- send = [],
  msg = doNothing,
  ws;
  window.WebSocket = class {
   constructor(url) {
    if (url?.includes?.("ev.io")) {
-    window.ws = ws = new _websocket(url);
+    ws = new _websocket(url);
     window.WebSocket = _websocket;
-    ws.send = function(data) {
-     send.push(data);
-    };
     Object.defineProperty(ws, "onmessage", {
      get: doNothing,
      set: _msg => {
@@ -741,17 +736,18 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
       ws.addEventListener("message", e => reply.push(e));
       Object.defineProperty(ws, "onmessage", {
        get: () => msg,
-       set: _msg => msg = _msg,
+       set: _msg => {
+        if (typeof _msg !== "function") _msg = doNothing;
+        msg = _msg;
+       },
       });
      },
      configurable: true,
     });
     setInterval(() => {
-     send.forEach(i => _send.apply(ws, [ i ]));
-     send = [];
      reply.forEach(msg);
      reply = [];
-    }, 50);
+    }, 25);
     return ws;
    } else {
     return new _websocket(url);

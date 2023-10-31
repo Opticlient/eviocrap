@@ -1,0 +1,335 @@
+<body>
+<script>
+(()=>{
+
+(_=e=>{let t,n=e.document,r=e.localStorage,o=e.sessionStorage,i="value",s=e.Node,l=s.prototype,c=e.JSON,f="innerText",u=e=>e+""===e,a=e=>"object"==typeof e&&null!=e,h=(r,o,i,l,c)=>{for(i of o){if(a(i))if(i instanceof s)l=i;else if((c=i.length)===~~c)for(c of(l=t,i))h(r,[c]);else{for(c in l=n.createElement(i.$||"a"),a(c=i._)?h(l,[c]):l.IO(c),i)({$:1,_:1,var:1})[c]||l.SS(c,i[c]);i.var===t?_:e[i.var]=l}else i||0==i?l=i:_;l!==t&&r.append(l)}};e._=_,l.UI=function(){this[f]="",h(this,arguments)},l.UI2=function(){h(this,arguments)},l.ALL=function(){return this.childNodes},e.HTML=n.documentElement,e.HEAD=n.head,e.BODY=n.body,e.LS={GET:(e,t,n)=>u(e=(n?o:r).getItem(e))?c.parse(e):t,SET:(e,n,i)=>(i?o:r)[n===t?"removeItem":"setItem"](e,c.stringify(n))},l.IO=function(e,n){return n=this,e!==t?n[f]=n[u(n[i])?i:u(n.src)?"src":f]=e:_,u(n[i])?n[i]:u(n.src)?n.src:n[f]},e.QS=l.QS=function(t,r){return t=(this==e?n:this)["querySelector"+(r?"All":"")](t),"function"==typeof r&&t.forEach(r),t},l.SS=function(e,n){let r,o=this,i=3,s=n!==t,l=[[t=>o.getAttribute(e),t=>o.setAttribute(e,n)],[t=>o.style[e],t=>o.style[e]=n],[t=>o[e],t=>o[e]=n]];if(a(e))for(i in e)o.SS(i,e[i]);else if(r=l[{atr_:0,css_:1,val_:2}[(e+="").slice(0,4)]])e=e.slice(4),s?r[1]():r=r[0]();else{for(;t===r;r=l[i][0]())i--;s&&(o["on"+e]!==(r=t)?o.addEventListener(e,n,{once:{load:s,error:s}[e]}):l[i][1]())}return r},e.UI=function(){let t=new e.DocumentFragment;return h(t,arguments),1==t.ALL().length?t.ALL()[0]:t}})(this);
+
+document.body.UI(
+ {
+  $: "textarea",
+  placeholder: "input",
+  var: "input",
+  class: "hide",
+ },
+ {
+  $: "br",
+  class: "hide",
+ },
+ {
+  _: [
+   "Length: ",
+   {
+    var: "length1",
+    _: "...",
+   },
+  ],
+  class: "hide",
+ },
+ {
+  $: "hr",
+  class: "hide",
+ },
+ {
+  $: "button",
+  _: "\u02C5 Encode \u02C5",
+  click: () => {
+   text = input.IO().split("");
+   length1.IO(text.length);
+   output.IO("");
+   input.IO("");
+   if (text.length < 6) {
+    output.IO(text.join(""));
+    length2.IO(length1.IO());
+    return;
+   };
+   QS(".hide", e => e.SS("display", "none"));
+   QS(".show", e => e.SS("display", ""));
+   patterns = [];
+   go(0, "setting things up", "...");
+  },
+  cursor: "pointer",
+  class: "hide",
+ },
+ {
+  $: "hr",
+  class: "hide",
+ },
+ {
+  $: "textarea",
+  placeholder: "output",
+  var: "output",
+  class: "hide",
+ },
+ {
+  $: "br",
+  class: "hide",
+ },
+ {
+  _: [
+   "Length: ",
+   {
+    var: "length2",
+    _: "...",
+   },
+  ],
+  class: "hide",
+ },
+ {
+  $: "div",
+  var: "status1",
+  class: "show",
+ },
+ {
+  $: "hr",
+  class: "show",
+ },
+ {
+  $: "div",
+  var: "status2",
+  class: "show",
+ },
+ {
+  $: "hr",
+  class: "show",
+ },
+ {
+  $: "div",
+  var: "status3",
+  class: "show",
+ },
+);
+
+QS(".show", e => e.SS("display", "none"));
+
+let prev = 0;
+const go = (i, text1, text2) => {
+ if (text1 !== undefined) status1.IO(text1);
+ if (text2 !== undefined) status2.IO(text2);
+ let currentDate = Date.now();
+ if (currentDate > prev) {
+  prev = currentDate + 15;
+  setTimeout(step[i]);
+ } else {
+  step[i]();
+ };
+};
+
+let variables="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_".split(""),variables2=[...variables,..."1234567890".split("")],var_lng=0;(()=>{let e=0,t=0,l=[];for(;variables2[t];)l.push(variables[e]+variables2[t]),e++,variables[e]||(e=0,t++);let n=["if","of","in","do","$1","$2","$3","$4","$5","$6","$7","$8","$9","$0"];l=l.filter((e=>!n.includes(e)));variables=variables.concat(l);var_lng=variables.length,variables2=0[0]})();
+
+let text, lookup, bestPattern, sliceLength, indexList, patterns, prevScore;
+
+const isValid = start => {
+ if (start + sliceLength >= text.length) return false;
+ for (let index = start, length = start + sliceLength; index < length; index++) {
+  let item = text[index];
+  if (item === undefined || typeof item === "number") {
+   return false;
+  };
+ };
+ return true;
+},
+patternLength = () => {
+ let result = variables[patterns.length];
+ if (result !== undefined) {
+  return result.length;
+ } else {
+  return Infinity;
+ };
+},
+slice2 = (start, end) => {
+ let result = [];
+ for (;start < end; start++) {
+  result.push(text[start]);
+ };
+ return result;
+},
+totalOf = (i, f) => {
+ let output = 0;
+ i.split("").forEach(i => i == f && output++);
+ return output;
+},
+toValidString = i => {
+ i = i.replaceAll("\\", "\\\\");
+ if (!i.includes('"')) {
+  return '"' + i + '"';
+ } else if (!i.includes("'")) {
+  return "'" + i + "'";
+ } else if (!i.includes("${")) {
+  if (!i.includes("`")) {
+   return "`" + i + "`";
+  } else {
+   if (totalOf('"') < totalOf("'")) {
+    if (totalOf("`") < totalOf('"')) {
+     return "`" + i.replaceAll("`", "\\`") + "`";
+    } else {
+     return '"' + i.replaceAll('"', '\\"') + '"';
+    };
+   } else {
+    if (totalOf("`") < totalOf("'")) {
+     return "`" + i.replaceAll("`", "\\`") + "`";
+    } else {
+     return "'" + i.replaceAll("'", "\\'") + "'";
+    };
+   };
+  };
+ };
+ if (totalOf('"') < totalOf("'")) {
+  return '"' + i.replaceAll('"', '\\"') + '"';
+ } else {
+  return "'" + i.replaceAll("'", "\\'") + "'";
+ };
+},
+step = [
+ (/*0*/) => {//console.log(0, text.includes(undefined));
+  if (variables[patterns.length] === undefined) {
+   go(5);
+   return;
+  };
+  prevScore = null;
+  bestPattern = [[], 0, 0];
+  sliceLength = 5 + patternLength();
+  indexList = [];
+  for (let index = 0, _sliceLength = sliceLength - 1, length = text.length - sliceLength; index < length; index++) {
+   if (isValid(index)) indexList.push(index);
+  };
+  sliceLength--;
+  go(1, "creating a full list of valid indexes");
+ },
+ (/*1*/) => {//console.log(1, text.includes(undefined));
+  sliceLength++;
+  indexList = indexList.filter(i => isValid(i));
+  go(2, "sorting indexes into a lookup table");
+ },
+ (/*2*/) => {//console.log(2, text.includes(undefined));
+  if (indexList[0] === undefined) {
+   go(4, "applying best pattern", bestPattern[1] + " best");
+   return;
+  };
+  lookup = {};
+  indexList.forEach(i => {
+   let length = i + sliceLength,
+   f = slice2(i, length).join(""),
+   g = lookup[f];
+   if (g) {
+    if (g[1] < i) {
+     g[0].push(i);
+    };
+   } else {
+    lookup[f] = [[i], length - 1];
+   };
+  });
+  go(3, "calculating best pattern");
+ },
+ (/*3*/) => {//console.log(3, text.includes(undefined));
+  lookup = Object.entries(lookup);
+  let length = 4 + patternLength();
+  lookup.forEach((i, f) => {
+   i[1][1] = (i[1][0].length - 1) * (i[0].length + totalOf(i[0], "\\") - length);
+   i[1][2] = i[0];
+   lookup[f] = i[1];
+  });
+  lookup = lookup.sort((i, f) => f[1] - i[1])[0];
+  lookup[1] -= length;
+  //let score = lookup[1]; //(lookup[1] - 1) * (lookup[2].length - length) - length;
+  status2.IO("score " + lookup[1] + " vs " + bestPattern[1] + " best\n" + lookup[2]);
+  if (lookup[1] > bestPattern[1]) {
+   bestPattern = [lookup[0], lookup[1], sliceLength, lookup[2]];
+  };
+  if (prevScore === lookup[1]) {
+   go(4);
+  } else {
+   prevScore = lookup[1];
+   go(1);
+  };
+ },
+ (/*4*/) => {//console.log(4, text.includes(undefined));
+  if (!bestPattern[1] || bestPattern[0][0] === undefined) {
+   go(5);
+   return;
+  };
+  let tempText = [],
+  replacer = patterns.push(bestPattern[3]) - 1;
+  sliceLength = bestPattern[2];
+  lookup = bestPattern[0];
+  //console.warn(text.length, sliceLength);
+  for (let index = 0, length = text.length, target = lookup.shift(); index < length;) {
+   if (index === target) {
+    target = lookup.shift();
+    tempText.push(replacer);
+    index += sliceLength;
+   } else {
+    tempText.push(text[index]);
+    index++;
+   };
+  };
+  text = tempText;
+  status3.IO(text.length);
+  go(0);
+ },
+ (/*5*/) => {
+  /*status1.IO("end");
+  status3.IO(text);*/
+  status1.IO("combining uncompressed data");
+  let tempText = [],
+  add = [];
+  for (let index = 0, length = text.length; index < length; index++) {
+   let item = text[index];
+   if (typeof item === "number") {
+    if (add[0] !== undefined) {
+     tempText.push(add.join(""));
+     add = [];
+    };
+    tempText.push(item);
+   } else {
+    add.push(item);
+   };
+  };
+  if (add[0] !== undefined) tempText.push(add.join(""));
+  text = tempText;
+  //status3.IO(text);
+  //console.log(patterns);
+  go(6, "converting to javascript");
+ },
+ (/*6*/) => {
+  patterns.forEach((i, f) => {
+   patterns[f] = toValidString(i);
+  });
+  text.forEach((i, f) => {
+   if (typeof i === "number") {
+    text[f] = variables[i];
+   } else {
+    text[f] = toValidString(i);
+   };
+  });
+  text = [text.join("+")];
+  status3.IO(text);
+  let data = [];
+  for (let index = 0, length = patterns.length; index < length; index++) {
+   data.push(variables[index]);
+  };
+  text.unshift(
+   "((",
+   data.join(","),
+   ")=>"
+  );
+  data = [];
+  patterns.forEach(i => data.push(i));
+  text.push(
+   ")(",
+   data.join(","),
+   ")"
+  );
+  text = text.join("");
+  QS(".hide", e => e.SS("display", ""));
+  QS(".show", e => e.SS("display", "none"));
+  status1.IO("");
+  status2.IO("");
+  status3.IO("");
+  output.IO(text);
+  length2.IO(text.length);
+  text = lookup = bestPattern = sliceLength = indexList = patterns = prevScore = undefined;
+ },
+];
+
+})();
+</script>
