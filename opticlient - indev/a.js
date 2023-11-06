@@ -23,6 +23,14 @@ const doNothing = function() {},
 saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls)),
 ls = JSON.parse(localStorage.getItem("opticlient"));
 
+//fixed a memory leak (1 / 3)
+(_consoleLog => {
+ for (let key in console) {
+  if (typeof console[key] === "function") console[key] = doNothing;
+ };
+ console.log2 = _consoleLog;
+})(console.log);
+
 //version control for opticlient (2 / 3)
 (() => {
  let didVersionChange = false;
@@ -68,6 +76,53 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  if (didVersionChange) saveData();
 })();
 
+//fixed a memory leak (2 / 3)
+(() => {
+ const el = window.addEventListener,
+ el2 = document.addEventListener,
+ once = { once: true },
+ isLoadEvent = {
+  load: true,
+  domcontentloaded: true,
+ };
+ window.addEventListener = function(type, callback, options) {
+  if (typeof callback !== "function") return;
+  if (isLoadEvent[type?.toLowerCase?.()]) {
+   if (typeof options === "boolean") {
+    options = {
+     capture: options,
+     once: true,
+    };
+   } else if (options && typeof options === "object") {
+    options.once = true;
+   } else {
+    options = once;
+   };
+  };
+  el.apply(window, arguments);
+ };
+ document.addEventListener = function(type, callback, options) {
+  if (typeof callback !== "function") return;
+  if (isLoadEvent[type?.toLowerCase?.()]) {
+   if (typeof options === "boolean") {
+    options = {
+     capture: options,
+     once: true,
+    };
+   } else if (options && typeof options === "object") {
+    options.once = true;
+   } else {
+    options = once;
+   };
+  };
+  el2.apply(document, arguments);
+ };
+ window.addEventListener("load", () => setTimeout(() => {
+  window.addEventListener = el;
+  document.addEventListener = el2;
+ }, 1000 * 5));
+})();
+
 //ad blocker (1 / 2)
 (() => {
  const doc = document.createElement;
@@ -79,25 +134,17 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   return f;
  };
- window.addEventListener("load", () => document.createElement = doc, { once: true });
+ window.addEventListener("load", () => document.createElement = doc);
 })();
 
 //disabled trackers
 (() => {
- window.addEventListener("load", () => window.gtag = window.ga = doNothing, { once: true });
+ window.addEventListener("load", () => window.cpmstarAPI = window.gtag = window.ga = doNothing);
 })();
-
-//fixed a memory leak (1 / 2)
-(_consoleLog => {
- for (let key in console) {
-  if (typeof console[key] === "function") console[key] = doNothing;
- };
- console.log2 = _consoleLog;
-})(console.log);
 
 //no confirm quit
 (() => {
- window.addEventListener("load", () => window.onbeforeunload = null, { once: true });
+ window.addEventListener("load", () => window.onbeforeunload = null);
 })();
 
 //optimized rendering
@@ -115,7 +162,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   const element = document.createElement("style");
   element.innerText = "img{image-rendering:pixelated}";
   document.head.appendChild(element);
- }, { once: true });
+ });
 })();
 
 //zoom keybind
@@ -276,7 +323,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
 })();
 
-//fixed a memory leak (2 / 2)
+//fixed a memory leak (3 / 3)
 (() => {
  const queue = [];
  window.setTimeout = function(callback, timeout) {
@@ -388,7 +435,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    };
    requestAnimationFrame(loop);
   }, { once: true });
- }, { once: true });
+ });
 })();
 
 //disabled capslock
@@ -405,7 +452,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     };
    };
   });
- }, { once: true });
+ });
 })();
 
 //auto switch on empty
@@ -485,7 +532,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    requestAnimationFrame(loop);
   };
   loop();
- }, { once: true });
+ });
  const el = document.addEventListener;
  document.addEventListener = function(type, callback, options) {
   if (type == "keydown") {
@@ -564,12 +611,12 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     });
    };
   };
- }, { once: true });
+ });
 })();
 
 //ad blocker (2 / 2)
 (() => {
- window.addEventListener("load", () => document.querySelector("style").innerText += "#stats_ad_right{opacity:0!important;pointer-events:none!important}", { once: true });
+ window.addEventListener("load", () => document.querySelector("style").innerText += "#stats_ad_right{opacity:0!important;pointer-events:none!important}");
 })();
 
 //version control for opticlient (3 / 3)
@@ -583,7 +630,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    };
    localStorage.setItem("opticlient-game-version", ver);
   };
- }, { once: true });
+ });
 })();
 
 //removing unused internals (1 / 2)
@@ -611,7 +658,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    remove.forEach(i => i.remove());
   };
   temp(document);
- }, { once: true });
+ });
 })();
 
 //benchmark performance optimizations (1 / 2)
@@ -648,7 +695,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    for (let key in original) delete THREE[key];
    localStorage.setItem("opticlient-three", keep.join(","));
   }, 1000 * 60 * 5.5);
- }, 0), { once: true });
+ }, 0));
 })();
 
 //benchmark performance optimizations (2 / 2)
@@ -688,7 +735,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  window.addEventListener("load", () => setTimeout(() => {
   for (let key in original) delete window[key];
   localStorage.setItem("opticlient-prototypes", keep.join(","));
- }, 1000 * 60 * 5.5), { once: true });
+ }, 1000 * 60 * 5.5));
 })();
 
 //removing unused internals (2 / 2)
@@ -697,7 +744,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   for (let key in window) {
    if (!window[key]) delete window[key];
   };
- }, { once: true });
+ });
 })();
 
 //removed billboards
@@ -777,7 +824,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     localStorage.setItem("opticlient-april-fools2", 1);
     setInterval(() => location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1000 * 30);
     location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-   }, 1000 * 6), { once: true });
+   }, 1000 * 6));
   };
  } else {
   localStorage.removeItem("opticlient-april-fools");
