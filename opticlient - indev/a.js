@@ -350,9 +350,8 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   const current = performance.now(),
   delta = current + (current - prev);
   prev = current;
-  for (let index = 0, length = queue.length; index < length; index++) {
-   let item = queue[index];
-   if (item && delta > item[0]) {
+  for (let item, index = 0, length = queue.length; index < length; index++) {
+   if ((item = queue[index]) && delta > item[0]) {
     delete queue[index];
     item[1]();
    };
