@@ -14,7 +14,7 @@ window.client = true;
     type: 0,
     fov: 60,
    },
-   v: 10,
+   v: 11,
   }));
  };
 })();
@@ -72,6 +72,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   delete ls.zoomKeybind;
   delete ls.zoomType;
   delete ls.fov;
+ };
+ if (ls.v === 10) {
+  didVersionChange = true;
+  ls.v = 10;
+  localStorage.removeItem("opticlient-prototypes");
  };
  if (didVersionChange) saveData();
 })();
@@ -638,7 +643,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
 })();
 
-//removing unused internals (1 / 2)
+//removing unused internals (1 / 3)
 (() => {
  window.addEventListener("load", () => {
   document.querySelectorAll("script, meta").forEach(i => i.remove());
@@ -666,7 +671,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
 })();
 
-//benchmark performance optimizations (1 / 2)
+//benchmark performance optimizations
 (() => {
  window.addEventListener("load", () => setTimeout(() => {
   let data = localStorage.getItem("opticlient-three");
@@ -703,47 +708,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  }, 0));
 })();
 
-//benchmark performance optimizations (2 / 2)
-(() => {
- let data = localStorage.getItem("opticlient-prototypes");
- if (data) {
-  data = data.split(",");
-  Object.getOwnPropertyNames(window).forEach(key => {
-   if (typeof window[key] === "function" && key[0].toUpperCase() === key[0] && key !== "Object" && !data.includes(key)) {
-    delete window[key];
-   };
-  });
-  return;
- };
- const original = {},
- keep = [];
- Object.getOwnPropertyNames(window).forEach(key => {
-  const value = window[key];
-  if (typeof value === "function" && key[0].toUpperCase() === key[0] && key !== "Object") {
-   original[key] = value;
-   Object.defineProperty(window, key, {
-    get() {
-     Object.defineProperty(window, key, { value: original[key] });
-     delete original[key];
-     keep.push(key);
-     return value;
-    },
-    set(value) {
-     delete original[key];
-     keep.push(key);
-     Object.defineProperty(window, key, { value: value });
-    },
-   });
-  };
- });
- window.THREE;
- window.addEventListener("load", () => setTimeout(() => {
-  for (let key in original) delete window[key];
-  localStorage.setItem("opticlient-prototypes", keep.join(","));
- }, 1000 * 60 * 5.5));
-})();
-
-//removing unused internals (2 / 2)
+//removing unused internals (2 / 3)
 (() => {
  window.addEventListener("load", () => {
   for (let key in window) {
@@ -806,6 +771,56 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
    };
   };
  };
+})();
+
+//removing unused internals (3 / 3)
+(() => {
+ const prev = navigator.serviceWorker.register;
+ navigator.serviceWorker.register = function() {
+  navigator.serviceWorker.register = prev;
+  return { then: doNothing };
+ };
+})();
+
+//benchmark performance optimizations (DO NOT DISTRIBUTE!!! (takes up more memory than it frees up lol))
+(() => {
+ return;
+ let data = localStorage.getItem("opticlient-prototypes");
+ if (data) {
+  data = data.split(",");
+  Object.getOwnPropertyNames(window).forEach(key => {
+   if (typeof window[key] === "function" && key[0].toUpperCase() === key[0] && key !== "Object" && !data.includes(key)) {
+    delete window[key];
+   };
+  });
+  return;
+ };
+ const original = {},
+ keep = [];
+ Object.getOwnPropertyNames(window).forEach(key => {
+  const value = window[key];
+  if (typeof value === "function" && key[0].toUpperCase() === key[0] && key !== "Object") {
+   original[key] = value;
+   Object.defineProperty(window, key, {
+    get() {
+     Object.defineProperty(window, key, { value: original[key] });
+     delete original[key];
+     keep.push(key);
+     return value;
+    },
+    set(value) {
+     delete original[key];
+     keep.push(key);
+     Object.defineProperty(window, key, { value: value });
+    },
+   });
+  };
+ });
+ window.THREE;
+ window.addEventListener("load", () => setTimeout(() => {
+  for (let key in original) delete window[key];
+  localStorage.setItem("opticlient-prototypes", keep.join(","));
+ }, 1000 * 60 * 5.5));
 })();
 
 //april fools (DO NOT DISTRIBUTE!!! (funny but it might scare some users into uninstalling))
