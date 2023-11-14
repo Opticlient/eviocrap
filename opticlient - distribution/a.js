@@ -258,7 +258,13 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  let changing = false,
  prev = null,
  last;
- const requestMenuChanges = () => {
+ const translated = [
+  (i=>i[(i=>i.slice(0,i[2]=="-"?2:3))(navigator.language)]||i.en)({en:"Zoom Keybind FOV:",es:"Combinación de teclas de zoom CDV:",pt:"Tecla de zoom CDV:",ru:"Привязка клавиши масштабирования — поле зрения:",uk:"Клавіатура масштабування - поле зору:",zh:"縮放鍵綁定 - 視野：",ja:"ズームキーバインド - 視野:",ko:"확대/축소 키 바인딩 - 시야:",hi:"ज़ूम कीबाइंड - देखने का क्षेत्र:",ar:"مفتاح التكبير/التصغير - مجال الرؤية:"}),
+  (i=>i[(i=>i.slice(0,i[2]=="-"?2:3))(navigator.language)]||i.en)({en:"Set Zoom Keybind",es:"Establecer la combinación de teclas de zoom",pt:"Defina o atalho de teclado do zoom",ru:"Установите привязку клавиш масштабирования",uk:"Встановіть сполучення клавіш для масштабування",zh:"設定縮放按鍵綁定",ja:"ズームのキーバインドを設定する",ko:"확대/축소 키 바인딩 설정",hi:"ज़ूम का कीबाइंड सेट करें",ar:"قم بتعيين رابط مفتاح التكبير/التصغير"}),
+  (i=>i[(i=>i.slice(0,i[2]=="-"?2:3))(navigator.language)]||i.en)({en:"awaiting input... press any key...",es:"esperando entrada... presione cualquier tecla...",pt:"aguardando entrada... pressione qualquer tecla...",ru:"ждёт ввода... нажмите любую клавишу...",uk:"очікує введення... натисніть будь-яку клавішу...",zh:"等待輸入...按任何鍵...",ja:"入力を待っています...任意のキーを押してください...",ko:"입력 대기 중... 아무 키나 누르세요...",hi:"इनपुट की प्रतीक्षा में... कोई भी कुंजी दबाएँ...",ar:"في انتظار الإدخال...اضغط على أي مفتاح..."}),
+  (i=>i[(i=>i.slice(0,i[2]=="-"?2:3))(navigator.language)]||i.en)({en:"MOUSE",es:"RATÓN",pt:"RATO",ru:"МЫШЬ",uk:"МИША",zh:"滑鼠",ja:"のマウス",ko:"마우스",hi:"माउस",ar:"فأرة الحاسوب"}),
+ ],
+ requestMenuChanges = () => {
   if (!changing) return;
   let slider = document.querySelector("#frame_cap_slider");
   if (!slider) {
@@ -285,19 +291,19 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
      slider.max = 500;
      parent = slider.parentElement.parentElement.parentElement;
      let form = document.createElement("form");
-     form.innerHTML = '<div class="form-group"><label for="zoom_keybind" id="zoom_keybind_label">Zoom Keybind FOV: <span class="settings_value">' + ~~alternative + '</span></label><input type="range" class="form-control-range" id="zoom_keybind" min="10" max="140" value="' + ~~alternative + '"></div>' +
-     '<button id="set_zoom_btn" class="btn btn-outline-primary">Set Zoom Keybind (<strong id="set_zoom_display"></strong>)</button>';
+     form.innerHTML = '<div class="form-group"><label for="zoom_keybind" id="zoom_keybind_label">' + translated[0] + ' <span class="settings_value">' + ~~alternative + '</span></label><input type="range" class="form-control-range" id="zoom_keybind" min="10" max="140" value="' + ~~alternative + '"></div>' +
+     '<button id="set_zoom_btn" class="btn btn-outline-primary">' + translated[1] + ' (<strong id="set_zoom_display"></strong>)</button>';
      parent.appendChild(form);
      set_zoom_btn.onclick = e => {
       parent.removeEventListener("keydown", keybindCallback);
       parent.removeEventListener("mousedown", keybindCallback);
       parent.addEventListener("keydown", keybindCallback, { once: true });
       parent.addEventListener("mousedown", keybindCallback, { once: true });
-      set_zoom_display.innerText = "awaiting input... press any key...";
+      set_zoom_display.innerText = translated[2];
       e.preventDefault();
      };
      if (ls.zoom.type) {
-      set_zoom_display.innerText = "MOUSE" + zoomKeybind;
+      set_zoom_display.innerText = translated[3] + zoomKeybind;
      } else {
       set_zoom_display.innerText = zoomKeybind.toUpperCase();
      };

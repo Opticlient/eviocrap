@@ -1,6 +1,6 @@
 {
  "name": "Opticlient | ev.io",
- "version": "2.4.3",
+ "version": "2.5.0",
  "description": "Adds features, fixes problems & optimizes the game. Made for ev.io!",
  "manifest_version": 3,
  "content_scripts": [
