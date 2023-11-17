@@ -701,7 +701,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     },
    });
   };
-  document.querySelector("#canvas")?.addEventListener("click", () => setTimeout(() => {
+  document.querySelector("#canvas")?.addEventListener?.("click", () => setTimeout(() => {
    if (!keep.length) return;
    for (let key in original) delete THREE[key];
    localStorage.setItem("opticlient-three", keep.join(","));
