@@ -2,7 +2,7 @@ let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
 
 
 
-if (window.client) return (s => alert(s + " is not compatible with other clients. " + s + " no es compatible con otros clientes. " + s + " não é compatível com outros clientes. " + s + " несовместим с другими клиентами. " + s + " 與其他客戶端不相容。"))("Opticlient");
+if (window.client) return alert((i=>i[(i=>i.slice(0,i[2]=="-"?2:3))(navigator.language)]||i.en)({en:"Opticlient failed to start because of one of your extensions!",es:"¡Opticlient no pudo iniciarse debido a una de sus extensiones!",pt:"O Opticlient falhou ao iniciar devido a uma de suas extensões!",ru:"Opticlient не запустился из-за одного из ваших расширений!",uk:"Opticlient не вдалося запустити через одне з ваших розширень!",zh:"由於您的擴充功能之一，Opticlient 無法啟動！",ja:"拡張機能の 1 つが原因で、Opticlient を起動できませんでした。",ko:"확장 중 하나로 인해 Opticlient를 시작하지 못했습니다!",hi:"आपके एक एक्सटेंशन के कारण ऑप्टिकल क्लाइंट प्रारंभ होने में विफल रहा!",ar:"فشل Opticlient في البدء بسبب أحد ملحقاتك!"}));
 window.client = true;
 
 //version control for opticlient (1 / 3)
@@ -14,7 +14,7 @@ window.client = true;
     type: 0,
     fov: 60,
    },
-   v: 10,
+   v: 11,
   }));
  };
 })();
@@ -72,6 +72,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   delete ls.zoomKeybind;
   delete ls.zoomType;
   delete ls.fov;
+ };
+ if (ls.v === 10) {
+  didVersionChange = true;
+  ls.v = 10;
+  localStorage.removeItem("opticlient-prototypes");
  };
  if (didVersionChange) saveData();
 })();
@@ -356,9 +361,8 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   const current = performance.now(),
   delta = current + (current - prev);
   prev = current;
-  for (let index = 0, length = queue.length; index < length; index++) {
-   let item = queue[index];
-   if (item && delta > item[0]) {
+  for (let item, index = 0, length = queue.length; index < length; index++) {
+   if ((item = queue[index]) && delta > item[0]) {
     delete queue[index];
     item[1]();
    };
@@ -629,7 +633,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 (() => {
  const list = {};
  window.addEventListener("load", () => {
-  const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.split?.("/")?.[0];
+  const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.replace?.("/public/bundle.js", "");
   if (localStorage.getItem("opticlient-game-version") !== ver) {
    for (let key in localStorage) {
     if (key.startsWith("opticlient-")) localStorage.removeItem(key);
@@ -639,7 +643,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
 })();
 
-//removing unused internals (1 / 2)
+//removing unused internals (1 / 3)
 (() => {
  window.addEventListener("load", () => {
   document.querySelectorAll("script, meta").forEach(i => i.remove());
@@ -667,7 +671,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
 })();
 
-//benchmark performance optimizations (1 / 2)
+//benchmark performance optimizations
 (() => {
  window.addEventListener("load", () => setTimeout(() => {
   let data = localStorage.getItem("opticlient-three");
@@ -704,47 +708,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  }, 0));
 })();
 
-//benchmark performance optimizations (2 / 2)
-(() => {
- let data = localStorage.getItem("opticlient-prototypes");
- if (data) {
-  data = data.split(",");
-  Object.getOwnPropertyNames(window).forEach(key => {
-   if (typeof window[key] === "function" && key[0].toUpperCase() === key[0] && key !== "Object" && !data.includes(key)) {
-    delete window[key];
-   };
-  });
-  return;
- };
- const original = {},
- keep = [];
- Object.getOwnPropertyNames(window).forEach(key => {
-  const value = window[key];
-  if (typeof value === "function" && key[0].toUpperCase() === key[0] && key !== "Object") {
-   original[key] = value;
-   Object.defineProperty(window, key, {
-    get() {
-     Object.defineProperty(window, key, { value: original[key] });
-     delete original[key];
-     keep.push(key);
-     return value;
-    },
-    set(value) {
-     delete original[key];
-     keep.push(key);
-     Object.defineProperty(window, key, { value: value });
-    },
-   });
-  };
- });
- window.THREE;
- window.addEventListener("load", () => setTimeout(() => {
-  for (let key in original) delete window[key];
-  localStorage.setItem("opticlient-prototypes", keep.join(","));
- }, 1000 * 60 * 5.5));
-})();
-
-//removing unused internals (2 / 2)
+//removing unused internals (2 / 3)
 (() => {
  window.addEventListener("load", () => {
   for (let key in window) {
@@ -806,6 +770,15 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     return new _websocket(url);
    };
   };
+ };
+})();
+
+//removing unused internals (3 / 3)
+(() => {
+ const prev = navigator.serviceWorker.register;
+ navigator.serviceWorker.register = function() {
+  navigator.serviceWorker.register = prev;
+  return { then: doNothing };
  };
 })();
 

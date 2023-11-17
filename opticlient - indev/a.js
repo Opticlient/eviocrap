@@ -633,7 +633,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 (() => {
  const list = {};
  window.addEventListener("load", () => {
-  const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.split?.("/")?.[0];
+  const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.replace?.("/public/bundle.js", "");
   if (localStorage.getItem("opticlient-game-version") !== ver) {
    for (let key in localStorage) {
     if (key.startsWith("opticlient-")) localStorage.removeItem(key);
