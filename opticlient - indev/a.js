@@ -701,10 +701,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     },
    });
   };
-  setTimeout(() => {
+  document.querySelector("#canvas")?.addEventListener("click", () => setTimeout(() => {
+   if (!keep.length) return;
    for (let key in original) delete THREE[key];
    localStorage.setItem("opticlient-three", keep.join(","));
-  }, 1000 * 60 * 5.5);
+  }, 1000 * 60 * 5.5), { once: true });
  }, 0));
 })();
 
