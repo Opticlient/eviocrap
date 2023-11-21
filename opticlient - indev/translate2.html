@@ -1,0 +1,326 @@
+<script>
+const list = `
+
+
+
+English
+Vietnamese
+Thai
+Spanish
+Japanese
+Turkish
+Indonesian
+Chinese
+German
+Russian
+French
+Portuguese
+Hindi
+Filipino
+Korean
+Finnish
+
+
+
+`.split("\n").filter(i => i),
+lookupTable = {
+ "Abkhazian": "ab",
+ "Afar": "aa",
+ "Afrikaans": "af",
+ "Akan": "ak",
+ "Albanian": "sq",
+ "Amharic": "am",
+ "Arabic": "ar",
+ "Aragonese": "an",
+ "Armenian": "hy",
+ "Assamese": "as",
+ "Avaric": "av",
+ "Avestan": "ae",
+ "Aymara": "ay",
+ "Azerbaijani": "az",
+ "Bambara": "bm",
+ "Bashkir": "ba",
+ "Basque": "eu",
+ "Belarusian": "be",
+ "Bengali (Bangla)": "bn",
+ "Bihari": "bh",
+ "Bislama": "bi",
+ "Bosnian": "bs",
+ "Breton": "br",
+ "Bulgarian": "bg",
+ "Burmese": "my",
+ "Catalan": "ca",
+ "Chamorro": "ch",
+ "Chechen": "ce",
+ "Chinese": "zh-Hans",
+ "Chuvash": "cv",
+ "Cornish": "kw",
+ "Corsican": "co",
+ "Cree": "cr",
+ "Croatian": "hr",
+ "Czech": "cs",
+ "Danish": "da",
+ "Dutch": "nl",
+ "Dzongkha": "dz",
+ "English": "en",
+ "Esperanto": "eo",
+ "Estonian": "et",
+ "Ewe": "ee",
+ "Faroese": "fo",
+ "Filipino": "tl",
+ "Fijian": "fj",
+ "Finnish": "fi",
+ "French": "fr",
+ "Galician": "gl",
+ "Gaelic (Scottish)": "gd",
+ "Gaelic (Manx)": "gv",
+ "Georgian": "ka",
+ "German": "de",
+ "Greek": "el",
+ "Greenlandic": "kl",
+ "Guarani": "gn",
+ "Gujarati": "gu",
+ "Haitian Creole": "ht",
+ "Hausa": "ha",
+ "Hebrew": "he",
+ "Herero": "hz",
+ "Hindi": "hi",
+ "Hiri Motu": "ho",
+ "Hungarian": "hu",
+ "Icelandic": "is",
+ "Igbo": "ig",
+ "Indonesian": "id",
+ "Interlingua": "ia",
+ "Interlingue": "ie",
+ "Inuktitut": "iu",
+ "Inupiak": "ik",
+ "Irish": "ga",
+ "Italian": "it",
+ "Japanese": "ja",
+ "Javanese": "jv",
+ "Kannada": "kn",
+ "Kanuri": "kr",
+ "Kashmiri": "ks",
+ "Kazakh": "kk",
+ "Khmer": "km",
+ "Kikuyu": "ki",
+ "Kinyarwanda (Rwanda)": "rw",
+ "Kirundi": "rn",
+ "Kyrgyz": "ky",
+ "Komi": "kv",
+ "Kongo": "kg",
+ "Korean": "ko",
+ "Kurdish": "ku",
+ "Kwanyama": "kj",
+ "Lao": "lo",
+ "Latin": "la",
+ "Latvian (Lettish)": "lv",
+ "Limburgish (Limburger)": "li",
+ "Lingala": "ln",
+ "Lithuanian": "lt",
+ "Luga-Katanga": "lu",
+ "Luxembourgish": "lb",
+ "Manx": "gv",
+ "Macedonian": "mk",
+ "Malagasy": "mg",
+ "Malay": "ms",
+ "Malayalam": "ml",
+ "Maltese": "mt",
+ "Maori": "mi",
+ "Marathi": "mr",
+ "Marshallese": "mh",
+ "Moldavian": "mo",
+ "Mongolian": "mn",
+ "Nauru": "na",
+ "Navajo": "nv",
+ "Ndonga": "ng",
+ "Northern Ndebele": "nd",
+ "Nepali": "ne",
+ "Norwegian": "no",
+ "Norwegian bokmål": "nb",
+ "Norwegian nynorsk": "nn",
+ "Nuosu": "ii",
+ "Occitan": "oc",
+ "Ojibwe": "oj",
+ "Oriya": "or",
+ "Oromo (Afaan Oromo)": "om",
+ "Ossetian": "os",
+ "Pāli": "pi",
+ "Persian (Farsi)": "fa",
+ "Polish": "pl",
+ "Portuguese": "pt",
+ "Punjabi (Eastern)": "pa",
+ "Quechua": "qu",
+ "Romansh": "rm",
+ "Romanian": "ro",
+ "Russian": "ru",
+ "Sami": "se",
+ "Samoan": "sm",
+ "Sango": "sg",
+ "Sanskrit": "sa",
+ "Serbian": "sr",
+ "Serbo-Croatian": "sh",
+ "Sesotho": "st",
+ "Setswana": "tn",
+ "Shona": "sn",
+ "Sichuan Yi": "ii",
+ "Sindhi": "sd",
+ "Sinhalese": "si",
+ "Siswati": "ss",
+ "Slovak": "sk",
+ "Slovenian": "sl",
+ "Somali": "so",
+ "Southern Ndebele": "nr",
+ "Spanish": "es",
+ "Sundanese": "su",
+ "Swahili (Kiswahili)": "sw",
+ "Swati": "ss",
+ "Swedish": "sv",
+ "Tagalog": "tl",
+ "Tahitian": "ty",
+ "Tajik": "tg",
+ "Tamil": "ta",
+ "Tatar": "tt",
+ "Telugu": "te",
+ "Thai": "th",
+ "Tibetan": "bo",
+ "Tigrinya": "ti",
+ "Tonga": "to",
+ "Tsonga": "ts",
+ "Turkish": "tr",
+ "Turkmen": "tk",
+ "Twi": "tw",
+ "Uyghur": "ug",
+ "Ukrainian": "uk",
+ "Urdu": "ur",
+ "Uzbek": "uz",
+ "Venda": "ve",
+ "Vietnamese": "vi",
+ "Volapük": "vo",
+ "Wallon": "wa",
+ "Welsh": "cy",
+ "Wolof": "wo",
+ "Western Frisian": "fy",
+ "Xhosa": "xh",
+ "Yoruba": "yo",
+ "Zulu": "zu",
+};
+</script>
+<body style="margin: 8px; height: calc(100% - 16px); width: calc(100% - 16px); text-align: center">
+<br><br>
+<input id="start" autocomplete="off"><button id="_open"></button>
+<br><br><br>
+<hr>
+<br><br>
+<textarea id="output" style="height: 70%; width: calc(100vw - 16px)" disabled></textarea>
+<style>
+* {
+ font-family: monospace;
+}
+
+button, input[type=checkbox] {
+ cursor: pointer;
+}
+
+[disabled] {
+ cursor: not-allowed;
+}
+
+textarea {
+ cursor: text !important;
+}
+</style>
+<script>
+document.title = (i=>i[navigator.language.slice(0,2)]||i.en)({en:"Izzy's Translator App",vi:"Ứng dụng phiên dịch của Izzy",th:"แอพนักแปลของอิซซี่",es:"Aplicación de traductor de Izzy",ja:"Izzyの翻訳アプリ",tr:"Izzy'nin Tercüman Uygulaması",id:"Aplikasi Penerjemah Izzy",zh:"Izzy 的翻译应用程序",de:"Izzys Übersetzer-App",ru:"Приложение-переводчик Иззи",fr:"Application de traduction d'Izzy",pt:"Aplicativo tradutor de Izzy",hi:"इज़ी का अनुवादक ऐप",tl:"App ng Tagasalin ni Izzy",ko:"Izzy의 번역기 앱",fi:"Izzyn kääntäjäsovellus"});
+start.placeholder = (i=>i[navigator.language.slice(0,2)]||i.en)({en:"translate",vi:"dịch",th:"แปลภาษา",es:"traducir",ja:"翻訳する",tr:"Çevirmek",id:"menerjemahkan",zh:"翻译",de:"übersetzen",ru:"переводить",fr:"traduire",pt:"traduzir",hi:"अनुवाद",tl:"Isalin",ko:"번역하다",fi:"Kääntää"}) + " (" + navigator.language.toLowerCase() + ")";
+_open.innerText = (i=>i[navigator.language.slice(0,2)]||i.en)({en:"go",vi:"đi",th:"ไป",es:"ir",ja:"行く",tr:"Gitmek",id:"pergi",zh:"去",de:"gehen",ru:"идти",fr:"aller",pt:"ir",hi:"जाना",tl:"pumunta ka",ko:"가다",fi:"mennä"});
+output.placeholder = (i=>i[navigator.language.slice(0,2)]||i.en)({en:"result",vi:"kết quả",th:"ผลลัพธ์",es:"resultado",ja:"結果",tr:"sonuç",id:"hasil",zh:"结果",de:"Ergebnis",ru:"результат",fr:"résultat",pt:"resultado",hi:"परिणाम",tl:"resulta",ko:"결과",fi:"tulos"});
+const failedTranslation = (i=>i[navigator.language.slice(0,2)]||i.en)({en:"Did not translate correctly!",vi:"Dịch không chính xác!",th:"แปลไม่ถูก!",es:"¡No tradujo correctamente!",ja:"正しく翻訳されませんでした!",tr:"Doğru tercüme edilmedi!",id:"Tidak menerjemahkan dengan benar!",zh:"没有翻译正确！",de:"Nicht richtig übersetzt!",ru:"Не правильно перевел!",fr:"Je n'ai pas traduit correctement!",pt:"Não traduziu corretamente!",hi:"सही अनुवाद नहीं किया!",tl:"Hindi naisalin ng tama!",ko:"제대로 번역되지 않았습니다!",fi:"Ei käännetty oikein!"});
+
+const lang2 = navigator.language.slice(0, 2);
+
+function disable(thing) {
+ thing.setAttribute("disabled", "");
+};
+
+function enable(thing) {
+ thing.removeAttribute("disabled");
+};
+
+(() => {
+ let newList = {},
+ notAllowed = [];
+ list.forEach(i => {
+  i = i.trim();
+  let f = lookupTable[i];
+  if (f) {
+   newList[f] = true;
+  } else if (i !== "") {
+   notAllowed.push("- " + i);
+  };
+ });
+ list.length = 0;
+ delete newList[lang2];
+ Object.keys(newList).forEach((i, f) => list[f] = i);
+ if (notAllowed.length) {
+  alert("Failed to load:\n" + notAllowed.join("\n"));
+ };
+})();
+
+const lng = list.length;
+
+let text = [],
+position = 0,
+val = "",
+val2 = "";
+
+_open.onclick = () => {
+ val = start.value.trim();
+ if (!val) return;
+ disable(start);
+ disable(_open);
+ text.push(val);
+ val2 = encodeURIComponent(val);
+ loop();
+};
+
+function translate() {
+ return fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + list[position] + "&dt=t&q=" + val2).then(e => e.json()).then(e => {
+  e = e[0];
+  const _list = [];
+  e.forEach(i => _list.push(i[0]));
+  return _list.join("");
+ });
+};
+
+const loop = () => {
+ if (position !== lng) {
+  translate().then(e => {
+   const pos = list[position];
+   if (pos === "fr") e = e.replaceAll(" !", "!").replaceAll(" ?", "?").replaceAll(" .", ".");
+   text.push(e);
+   if (e === val) {
+    for (let key in lookupTable) {
+     if (lookupTable[key] === pos) {
+      alert(`${key} | ${failedTranslation}`);
+      break;
+     };
+    };
+   };
+   position++;
+   loop();
+  });
+ } else {
+  const _text = [];
+  _text.push(lang2 + ":" + JSON.stringify(text.shift()));
+  text.forEach((i, f) => _text.push(list[f].slice(0, 2) + ":" + JSON.stringify(i)));
+  output.value = '(i=>i[navigator.language.slice(0,2)]||i.' + lang2 + ")({" + _text.join(",") + "})";
+  text = [];
+  position = 0;
+  val = "";
+  val2 = "";
+  enable(start);
+  enable(_open);
+ };
+};
+</script>
