@@ -554,11 +554,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//retain session information when changing account (1 / 3)
+//retain session information when changing account (1 / 3) (DO NOT DISTRIBUTE!!! (work in progress))
 (() => {
- const _fetch = window.fetch;
- let last_match = "",
- correction = false;
+ const _fetch = window.fetch,
+ match_history = {};
+ let correction = false;
  window.fetch = function(url, options) {
   if (url?.includes?.("/seek?req=")) {
    return new Promise(resolve => {
@@ -566,8 +566,9 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
      _fetch(url, options).then(e => {
       e.text().then(f => {
        let g = JSON.parse(f).lobbyId;
-       if (g !== last_match) {
-        last_match = g;
+       if (!match_history[g]) {
+        (_g => setTimeout(() => delete match_history[_g], 1000 * 60 * 4))(g);
+        match_history[g] = true;
         if (correction) {
          history.replaceState(null, "", location.origin);
          document.title = location.origin;
@@ -575,7 +576,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
          correction = false;
         };
         _fetch("data:text/json;base64," + btoa(f)).then(resolve);
-       } else retry();
+       } else setTimeout(retry, 100);
       });
      });
     };
