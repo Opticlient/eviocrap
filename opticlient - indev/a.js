@@ -554,7 +554,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//retain session information when changing account (1 / 3) (DO NOT DISTRIBUTE!!! (work in progress))
+//retain session information when changing account (1 / 3)
 (() => {
  const _fetch = window.fetch,
  match_history = {};
