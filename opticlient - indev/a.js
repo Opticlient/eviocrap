@@ -9,12 +9,13 @@ window.client = true;
 (() => {
  if (!localStorage.getItem("opticlient")) {
   localStorage.setItem("opticlient", JSON.stringify({
+   hpi: 0,
    zoom: {
     keybind: "p",
     type: 0,
     fov: 60,
    },
-   v: 11,
+   v: 12,
   }));
  };
 })();
@@ -75,8 +76,13 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
  if (ls.v === 10) {
   didVersionChange = true;
-  ls.v = 10;
+  ls.v = 11;
   localStorage.removeItem("opticlient-prototypes");
+ };
+ if (ls.v === 11) {
+  didVersionChange = true;
+  ls.v = 12;
+  ls.hpi = 0;
  };
  if (didVersionChange) saveData();
 })();
@@ -782,6 +788,14 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   navigator.serviceWorker.register = prev;
   return { then: doNothing };
  };
+})();
+
+//hp indicator
+(() => {
+ if (ls.hpi === 2) return;
+ window.addEventListener("load", () => {
+  document.querySelector("#healthDivCont").clientWidth
+ });
 })();
 
 //benchmark performance optimizations (DO NOT DISTRIBUTE!!! (takes up more memory than it frees up lol))
