@@ -793,7 +793,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 (() => {
  if (ls.hpi === 2) return;
  const _src = Object.getOwnPropertyDescriptor(Audio.prototype, "src");
- console.log2(src);
+ console.log2(_src);
  //HOW THE FUCK IS THERE NOTHING THERE!??!?!?? I FUCKING SEE IT IN THE PROTOTYPE YOU LYING FUCK!!!! FUCK YOU JAVASCRIPT!!!!!!!!
  window.addEventListener("load", () => {
   document.querySelector("#healthDivCont").clientWidth;
