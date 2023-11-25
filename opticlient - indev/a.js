@@ -26,7 +26,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //fixed a memory leak (1 / 3)
 (_consoleLog => {
- for (let key in console) {
+ for (const key in console) {
   if (typeof console[key] === "function") console[key] = doNothing;
  };
  console.log2 = _consoleLog;
@@ -378,7 +378,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //fixed resetting settings bug
 (() => {
- for (let key in localStorage) {
+ for (const key in localStorage) {
   if (typeof localStorage[key] === "string" && !(key.includes("ev") || key.includes("client"))) localStorage.removeItem(key);
  };
 })();
@@ -506,9 +506,8 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     requestAnimationFrame(ls_callback);
    } else {
     let search = _ls.inputs.keyCodeToActionMap;
-    for (let key in search) {
-     let value = search[key];
-     if (value == 12) {
+    for (const key in search) {
+     if (search[key] == 12) {
       running = false;
       ev.keyCode = key - 0;
       return;
@@ -642,7 +641,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  window.addEventListener("load", () => {
   const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.replace?.("/public/bundle.js", "");
   if (localStorage.getItem("opticlient-game-version") !== ver) {
-   for (let key in localStorage) {
+   for (const key in localStorage) {
     if (key.startsWith("opticlient-")) localStorage.removeItem(key);
    };
    localStorage.setItem("opticlient-game-version", ver);
@@ -684,14 +683,14 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   let data = localStorage.getItem("opticlient-three");
   if (data) {
    data = data.split(",");
-   for (let key in THREE) {
+   for (const key in THREE) {
     if (!data.includes(key)) delete THREE[key];
    };
    return;
   };
   const original = {},
   keep = [];
-  for (let key in THREE) {
+  for (const key in THREE) {
    const value = THREE[key];
    original[key] = value;
    Object.defineProperty(THREE, key, {
@@ -710,7 +709,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   document.querySelector("#canvas")?.addEventListener?.("click", () => setTimeout(() => {
    if (!keep.length) return;
-   for (let key in original) delete THREE[key];
+   for (const key in original) delete THREE[key];
    localStorage.setItem("opticlient-three", keep.join(","));
   }, 1000 * 60 * 5.5), { once: true });
  }, 0));
@@ -719,7 +718,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 //removing unused internals (2 / 3)
 (() => {
  window.addEventListener("load", () => {
-  for (let key in window) {
+  for (const key in window) {
    if (!window[key]) delete window[key];
   };
  });
@@ -793,8 +792,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 //hp indicator
 (() => {
  if (ls.hpi === 2) return;
+ const _src = Object.getOwnPropertyDescriptor(Audio.prototype, "src");
+ console.log2(src);
+ //HOW THE FUCK IS THERE NOTHING THERE!??!?!?? I FUCKING SEE IT IN THE PROTOTYPE YOU LYING FUCK!!!! FUCK YOU JAVASCRIPT!!!!!!!!
  window.addEventListener("load", () => {
-  document.querySelector("#healthDivCont").clientWidth
+  document.querySelector("#healthDivCont").clientWidth;
  });
 })();
 
