@@ -1,4 +1,4 @@
-let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
+(()=>{const t=document.createElement("a");t.setAttribute("onclick",`(()=>{
 
 
 
@@ -9,13 +9,12 @@ window.client = true;
 (() => {
  if (!localStorage.getItem("opticlient")) {
   localStorage.setItem("opticlient", JSON.stringify({
-   hpi: 0,
    zoom: {
     keybind: "p",
     type: 0,
     fov: 60,
    },
-   v: 12,
+   v: 13,
   }));
  };
 })();
@@ -83,6 +82,11 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   didVersionChange = true;
   ls.v = 12;
   ls.hpi = 0;
+ };
+ if (ls.v === 12) {
+  didVersionChange = true;
+  ls.v = 13;
+  delete ls.hpi;
  };
  if (didVersionChange) saveData();
 })();
@@ -789,14 +793,22 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//hp indicator
+//hp indicator (DO NOT DISTRIBUTE!!! (xen0 didn't want it))
 (() => {
  if (ls.hpi === 2) return;
- const _src = Object.getOwnPropertyDescriptor(Audio.prototype, "src");
- console.log2(_src);
- //HOW THE FUCK IS THERE NOTHING THERE!??!?!?? I FUCKING SEE IT IN THE PROTOTYPE YOU LYING FUCK!!!! FUCK YOU JAVASCRIPT!!!!!!!!
  window.addEventListener("load", () => {
-  document.querySelector("#healthDivCont").clientWidth;
+  if (!document.querySelector("#healthDiv")) return;
+  document.querySelector("#healthDiv").style.width = "";
+  const display = document.querySelector("#healthDiv").style,
+  canvas = document.querySelector("#canvas");
+  Object.defineProperty(document.querySelector("#healthDiv").style, "width", {
+   get: doNothing,
+   set: e => {
+    display.minWidth = e;
+    e = ~~(25 - (e.slice(0, -2) / 340) * 25);
+    canvas.style.filter = e ? "brightness(" + (100 - e) + "%)" : "";
+   },
+  });
  });
 })();
 
@@ -925,4 +937,4 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 
 
-})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick");
+})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick")})();

@@ -1,4 +1,4 @@
-let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
+(()=>{const t=document.createElement("a");t.setAttribute("onclick",`(()=>{
 
 
 
@@ -786,4 +786,4 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 
 
-})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick");
+})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick")})();
