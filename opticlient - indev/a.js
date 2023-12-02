@@ -795,6 +795,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //hp indicator (DO NOT DISTRIBUTE!!! (xen0 didn't want it))
 (() => {
+ return;
  if (ls.hpi === 2) return;
  window.addEventListener("load", () => {
   if (!document.querySelector("#healthDiv")) return;
