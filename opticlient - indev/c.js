@@ -15,7 +15,7 @@
 //retain session information when changing account (3 / 3)
 (() => {
  window.addEventListener("load", () => {
-  document.querySelector("#edit-submit").addEventListener("click", e => {
+  document.querySelector("#edit-submit").addEventListener("click", () => {
    if (location.search) sessionStorage.setItem("opticlient-continue2", location.search);
   });
  }, { once: true });
