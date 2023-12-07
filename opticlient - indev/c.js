@@ -1,4 +1,4 @@
-let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
+(t=>{t.setAttribute("onclick",`(()=>{
 
 
 
@@ -23,4 +23,4 @@ let t=document.createElement("a");t.setAttribute("onclick",`(()=>{
 
 
 
-})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick");
+})();`);document.documentElement.appendChild(t);t.click();t.removeAttribute("onclick")})(document.createElement("a"));
