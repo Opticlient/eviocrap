@@ -13,7 +13,8 @@
    ],
    "run_at": "document_start",
    "js": [
-    "b.js"
+    "b.js",
+    "d.js"
    ]
   },
   {
@@ -38,6 +39,16 @@
    "run_at": "document_start",
    "js": [
     "c.js"
+   ]
+  }
+ ],
+ "web_accessible_resources": [
+  {
+   "resources": [
+    "<all_urls>"
+   ],
+   "matches": [
+    "<all_urls>"
    ]
   }
  ],

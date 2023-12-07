@@ -793,6 +793,17 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
+//save skin data (DO NOT DISTRIBUTE!!! (this needs to be in it's own script))
+(() => {
+ return;
+ const id = "${chrome.runtime.id}";
+ console.log2(id);
+ indexedDB.open("opticlient", 1).addEventListener("success", e => {
+  window.test = e = e.target.result;
+  console.log2(e);
+ }, { once: true });
+})();
+
 //hp indicator (DO NOT DISTRIBUTE!!! (xen0 didn't want it))
 (() => {
  return;
