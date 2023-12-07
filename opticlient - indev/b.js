@@ -1,2 +1,2 @@
 //reduces the chance of a white flash occuring when a page loads
-_=document.documentElement.style;_.backgroundColor="#000";_.visibility="hidden";addEventListener("load",()=>_.backgroundColor=_.visibility="",{once:true})
+(_=>{_.backgroundColor="#000";_.visibility="hidden";addEventListener("load",()=>_.backgroundColor=_.visibility="",{once:true})})(document.documentElement.style);
