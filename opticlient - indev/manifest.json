@@ -13,7 +13,6 @@
    ],
    "run_at": "document_start",
    "js": [
-    "d.js",
     "b.js"
    ]
   },
@@ -26,6 +25,7 @@
    ],
    "run_at": "document_start",
    "js": [
+    "d.js",
     "a.js"
    ]
   },
