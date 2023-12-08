@@ -25,7 +25,6 @@
    ],
    "run_at": "document_start",
    "js": [
-    "d.js",
     "a.js"
    ]
   },

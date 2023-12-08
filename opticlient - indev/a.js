@@ -739,9 +739,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   },
  ]));
  XMLHttpRequest.prototype.open = function(type, url) {
-  if (url?.includes?.("/billboards")) {
-   url = alt_url;
-  };
+  if (typeof url === "string" && url.includes("/billboards")) url = alt_url;
   open.apply(this, arguments);
  };
 })();
@@ -793,15 +791,42 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//save skin data (DO NOT DISTRIBUTE!!! (this needs to be in it's own script))
+//save models (DO NOT DISTRIBUTE!!! (this does not work))
 (() => {
- return;
- const id = "${chrome.runtime.id}";
- console.log2(id);
- indexedDB.open("opticlient", 1).addEventListener("success", e => {
-  window.test = e = e.target.result;
-  console.log2(e);
+ let script = document.createElement("script");
+ script.addEventListener("load", () => {
+  console.log2("loaded bullshit");
+ const open = XMLHttpRequest.prototype.open,
+ send = XMLHttpRequest.prototype.send;
+ XMLHttpRequest.prototype.wait = false;
+ XMLHttpRequest.prototype._send = false;
+ localforage.ready().then(e => console.log2(true, e));
+ XMLHttpRequest.prototype.open = function(type, url) {
+  if (type === "GET" && typeof url === "string" && url.slice(-7).includes(".ev")) {
+   const filename = url.split("/").slice(-1)[0];
+   localforage.getItem(filename + "*").then(e => console.log2(e));
+   console.log2(filename);
+  };
+  open.apply(this, arguments);
+ };
+ XMLHttpRequest.prototype.send = function(_data) {
+  if (this.wait) {
+   this._send = true;
+   this.data = _data;
+  } else {
+   send.apply(this, arguments);
+  };
+ };
+ const fakeURL = text => {
+  text = URL.createObjectURL(new Blob(["a"]));
+  setTimeout(() => URL.revokeObjectURL(text));
+  return text;
+ };
  }, { once: true });
+ window.addEventListener("load", () => {
+  document.head.appendChild(script);
+  script.src = "https://raw.githubusercontent.com/localForage/localForage/master/dist/localforage.min.js";
+ });
 })();
 
 //hp indicator (DO NOT DISTRIBUTE!!! (xen0 didn't want it))
