@@ -791,8 +791,9 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//save models (DO NOT DISTRIBUTE!!! (this does not work))
+//save models (DO NOT DISTRIBUTE!!! (this doesn't work))
 (() => {
+ return;
  let script = document.createElement("script");
  script.addEventListener("load", () => {
   console.log2("loaded bullshit");
