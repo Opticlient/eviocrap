@@ -27,18 +27,6 @@
    "js": [
     "a.js"
    ]
-  },
-  {
-   "matches": [
-    "https://ev.io/user/login",
-    "https://ev.io/user/login?*",
-    "https://staging.ev.io/user/login",
-    "https://staging.ev.io/user/login?*"
-   ],
-   "run_at": "document_start",
-   "js": [
-    "c.js"
-   ]
   }
  ],
  "icons": {

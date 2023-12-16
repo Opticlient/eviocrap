@@ -563,27 +563,20 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//retain session information when changing account (1 / 3)
+//always join different lobbies
 (() => {
  const _fetch = window.fetch,
  match_history = {};
- let correction = false;
  window.fetch = function(url, options) {
   if (url?.includes?.("/seek?req=")) {
    return new Promise(resolve => {
     const retry = () => {
      _fetch(url, options).then(e => {
       e.text().then(f => {
-       let g = JSON.parse(f).lobbyId;
+       const g = JSON.parse(f).lobbyId;
        if (!match_history[g]) {
         (_g => setTimeout(() => delete match_history[_g], 1000 * 60 * 4))(g);
         match_history[g] = true;
-        if (correction) {
-         history.replaceState(null, "", location.origin);
-         document.title = location.origin;
-         document.querySelector("title")?.remove?.();
-         correction = false;
-        };
         _fetch("data:text/json;base64," + btoa(f)).then(resolve);
        } else setTimeout(retry, 100);
       });
@@ -594,44 +587,6 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   return _fetch(url, options);
  };
- sessionStorage.removeItem("opticlient-continue");
- if (location.search) {
-  if (!location.search.includes("&") && location.search.startsWith("?game=")) correction = true;
- } else {
-  if (sessionStorage.getItem("opticlient-continue2")) {
-   location.search = sessionStorage.getItem("opticlient-continue2");
-  }
- };
- sessionStorage.removeItem("opticlient-continue2");
- window.addEventListener("load", () => {
-  let button = document.querySelector("#login_button");
-  if (button) {
-   button.addEventListener("click", () => {
-    const time = document.querySelector("#time_icon");
-    if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
-     if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
-      sessionStorage.setItem("opticlient-continue", "?game=" + last_match);
-     } else {
-      sessionStorage.setItem("opticlient-continue", location.search);
-     };
-    };
-   });
-  } else {
-   button = document.querySelector("#logout_button");
-   if (button) {
-    button.addEventListener("click", () => {
-     const time = document.querySelector("#time_icon");
-     if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
-      if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
-       sessionStorage.setItem("opticlient-continue2", "?game=" + last_match);
-      } else {
-       sessionStorage.setItem("opticlient-continue2", location.search);
-      };
-     };
-    });
-   };
-  };
- });
 })();
 
 //ad blocker (2 / 2)

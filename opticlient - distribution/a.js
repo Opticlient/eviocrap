@@ -14,7 +14,7 @@ window.client = true;
     type: 0,
     fov: 60,
    },
-   v: 11,
+   v: 13,
   }));
  };
 })();
@@ -25,7 +25,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //fixed a memory leak (1 / 3)
 (_consoleLog => {
- for (let key in console) {
+ for (const key in console) {
   if (typeof console[key] === "function") console[key] = doNothing;
  };
  console.log2 = _consoleLog;
@@ -75,8 +75,18 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
  if (ls.v === 10) {
   didVersionChange = true;
-  ls.v = 10;
+  ls.v = 11;
   localStorage.removeItem("opticlient-prototypes");
+ };
+ if (ls.v === 11) {
+  didVersionChange = true;
+  ls.v = 12;
+  ls.hpi = 0;
+ };
+ if (ls.v === 12) {
+  didVersionChange = true;
+  ls.v = 13;
+  delete ls.hpi;
  };
  if (didVersionChange) saveData();
 })();
@@ -372,7 +382,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 
 //fixed resetting settings bug
 (() => {
- for (let key in localStorage) {
+ for (const key in localStorage) {
   if (typeof localStorage[key] === "string" && !(key.includes("ev") || key.includes("client"))) localStorage.removeItem(key);
  };
 })();
@@ -500,9 +510,8 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
     requestAnimationFrame(ls_callback);
    } else {
     let search = _ls.inputs.keyCodeToActionMap;
-    for (let key in search) {
-     let value = search[key];
-     if (value == 12) {
+    for (const key in search) {
+     if (search[key] == 12) {
       running = false;
       ev.keyCode = key - 0;
       return;
@@ -554,27 +563,20 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  };
 })();
 
-//retain session information when changing account (1 / 3)
+//always join different lobbies
 (() => {
  const _fetch = window.fetch,
  match_history = {};
- let correction = false;
  window.fetch = function(url, options) {
   if (url?.includes?.("/seek?req=")) {
    return new Promise(resolve => {
     const retry = () => {
      _fetch(url, options).then(e => {
       e.text().then(f => {
-       let g = JSON.parse(f).lobbyId;
+       const g = JSON.parse(f).lobbyId;
        if (!match_history[g]) {
         (_g => setTimeout(() => delete match_history[_g], 1000 * 60 * 4))(g);
         match_history[g] = true;
-        if (correction) {
-         history.replaceState(null, "", location.origin);
-         document.title = location.origin;
-         document.querySelector("title")?.remove?.();
-         correction = false;
-        };
         _fetch("data:text/json;base64," + btoa(f)).then(resolve);
        } else setTimeout(retry, 100);
       });
@@ -585,44 +587,6 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   return _fetch(url, options);
  };
- sessionStorage.removeItem("opticlient-continue");
- if (location.search) {
-  if (!location.search.includes("&") && location.search.startsWith("?game=")) correction = true;
- } else {
-  if (sessionStorage.getItem("opticlient-continue2")) {
-   location.search = sessionStorage.getItem("opticlient-continue2");
-  }
- };
- sessionStorage.removeItem("opticlient-continue2");
- window.addEventListener("load", () => {
-  let button = document.querySelector("#login_button");
-  if (button) {
-   button.addEventListener("click", () => {
-    const time = document.querySelector("#time_icon");
-    if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
-     if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
-      sessionStorage.setItem("opticlient-continue", "?game=" + last_match);
-     } else {
-      sessionStorage.setItem("opticlient-continue", location.search);
-     };
-    };
-   });
-  } else {
-   button = document.querySelector("#logout_button");
-   if (button) {
-    button.addEventListener("click", () => {
-     const time = document.querySelector("#time_icon");
-     if (time && time.parentElement.innerText.trim().split(":")[0] - 0) {
-      if (location.search.length <= 1 || (location.search.startsWith("?game=") && !location.search.includes("&"))) {
-       sessionStorage.setItem("opticlient-continue2", "?game=" + last_match);
-      } else {
-       sessionStorage.setItem("opticlient-continue2", location.search);
-      };
-     };
-    });
-   };
-  };
- });
 })();
 
 //ad blocker (2 / 2)
@@ -636,7 +600,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  window.addEventListener("load", () => {
   const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.replace?.("/public/bundle.js", "");
   if (localStorage.getItem("opticlient-game-version") !== ver) {
-   for (let key in localStorage) {
+   for (const key in localStorage) {
     if (key.startsWith("opticlient-")) localStorage.removeItem(key);
    };
    localStorage.setItem("opticlient-game-version", ver);
@@ -678,14 +642,14 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   let data = localStorage.getItem("opticlient-three");
   if (data) {
    data = data.split(",");
-   for (let key in THREE) {
+   for (const key in THREE) {
     if (!data.includes(key)) delete THREE[key];
    };
    return;
   };
   const original = {},
   keep = [];
-  for (let key in THREE) {
+  for (const key in THREE) {
    const value = THREE[key];
    original[key] = value;
    Object.defineProperty(THREE, key, {
@@ -704,7 +668,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   document.querySelector("#canvas")?.addEventListener?.("click", () => setTimeout(() => {
    if (!keep.length) return;
-   for (let key in original) delete THREE[key];
+   for (const key in original) delete THREE[key];
    localStorage.setItem("opticlient-three", keep.join(","));
   }, 1000 * 60 * 5.5), { once: true });
  }, 0));
@@ -713,7 +677,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
 //removing unused internals (2 / 3)
 (() => {
  window.addEventListener("load", () => {
-  for (let key in window) {
+  for (const key in window) {
    if (!window[key]) delete window[key];
   };
  });
@@ -730,9 +694,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   },
  ]));
  XMLHttpRequest.prototype.open = function(type, url) {
-  if (url?.includes?.("/billboards")) {
-   url = alt_url;
-  };
+  if (typeof url === "string" && url.includes("/billboards")) url = alt_url;
   open.apply(this, arguments);
  };
 })();
