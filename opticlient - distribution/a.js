@@ -5,7 +5,7 @@
 if (window.client) return alert((i=>i[navigator.language.slice(0,2)]||i.en)({en:"Opticlient failed to start because of one of your extensions!",vi:"Opticlient không khởi động được do một trong các tiện ích mở rộng của bạn!",th:"Opticlient ไม่สามารถเริ่มต้นได้เนื่องจากส่วนขยายของคุณ!",es:"¡Opticlient no pudo iniciarse debido a una de sus extensiones!",ja:"拡張機能の 1 つが原因で、Opticlient を起動できませんでした。",tr:"Uzantılarınızdan biri nedeniyle Opticlient başlatılamadı!",id:"Optclient gagal memulai karena salah satu ekstensi Anda!",zh:"由于您的扩展之一，Opticlient 无法启动！",de:"Opticclient konnte aufgrund einer Ihrer Erweiterungen nicht gestartet werden!",ru:"Opticlient не удалось запустить из-за одного из ваших расширений!",fr:"Opticclient n'a pas pu démarrer à cause d'une de vos extensions !",pt:"O Opticlient falhou ao iniciar devido a uma de suas extensões!",hi:"आपके एक एक्सटेंशन के कारण ऑप्टिकल क्लाइंट प्रारंभ होने में विफल रहा!",tl:"Nabigong magsimula ang optimient dahil sa isa sa iyong mga extension!",ko:"확장 기능 중 하나로 인해 Opticlient를 시작하지 못했습니다!",fi:"Opticlient ei käynnistynyt yhden laajennuksesi vuoksi!"}));
 window.client = true;
 
-//version control for opticlient (1 / 3)
+//version control for opticlient (1 / 2)
 (() => {
  if (!localStorage.getItem("opticlient")) {
   localStorage.setItem("opticlient", JSON.stringify({
@@ -14,7 +14,7 @@ window.client = true;
     type: 0,
     fov: 60,
    },
-   v: 13,
+   v: 16,
   }));
  };
 })();
@@ -31,7 +31,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  console.log2 = _consoleLog;
 })(console.log);
 
-//version control for opticlient (2 / 3)
+//version control for opticlient (2 / 2)
 (() => {
  let didVersionChange = false;
  if (ls.v === 1) {
@@ -87,6 +87,12 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   didVersionChange = true;
   ls.v = 13;
   delete ls.hpi;
+ };
+ if (ls.v <= 15) {
+  didVersionChange = true;
+  ls.v = 16;
+  localStorage.removeItem("opticlient-three");
+  localStorage.removeItem("opticlient-game-version");
  };
  if (didVersionChange) saveData();
 })();
@@ -594,20 +600,6 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  window.addEventListener("load", () => document.querySelector("style").innerText += "#stats_ad_right{opacity:0!important;pointer-events:none!important}");
 })();
 
-//version control for opticlient (3 / 3)
-(() => {
- const list = {};
- window.addEventListener("load", () => {
-  const ver = Object.values(document.querySelectorAll("script[src]")).filter(i => i.src.includes("bundle.js"))[0]?.src?.split?.("dist/")?.[1]?.replace?.("/public/bundle.js", "");
-  if (localStorage.getItem("opticlient-game-version") !== ver) {
-   for (const key in localStorage) {
-    if (key.startsWith("opticlient-")) localStorage.removeItem(key);
-   };
-   localStorage.setItem("opticlient-game-version", ver);
-  };
- });
-})();
-
 //removing unused internals (1 / 3)
 (() => {
  window.addEventListener("load", () => {
@@ -634,44 +626,6 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
   };
   temp(document);
  });
-})();
-
-//benchmark performance optimizations
-(() => {
- window.addEventListener("load", () => setTimeout(() => {
-  let data = localStorage.getItem("opticlient-three");
-  if (data) {
-   data = data.split(",");
-   for (const key in THREE) {
-    if (!data.includes(key)) delete THREE[key];
-   };
-   return;
-  };
-  const original = {},
-  keep = [];
-  for (const key in THREE) {
-   const value = THREE[key];
-   original[key] = value;
-   Object.defineProperty(THREE, key, {
-    get() {
-     Object.defineProperty(THREE, key, { value: original[key] });
-     delete original[key];
-     keep.push(key);
-     return value;
-    },
-    set(value) {
-     delete original[key];
-     keep.push(key);
-     Object.defineProperty(THREE, key, { value: value });
-    },
-   });
-  };
-  document.querySelector("#canvas")?.addEventListener?.("click", () => setTimeout(() => {
-   if (!keep.length) return;
-   for (const key in original) delete THREE[key];
-   localStorage.setItem("opticlient-three", keep.join(","));
-  }, 1000 * 60 * 5.5), { once: true });
- }, 0));
 })();
 
 //removing unused internals (2 / 3)

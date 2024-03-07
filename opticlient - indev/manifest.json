@@ -9,7 +9,9 @@
     "https://ev.io/*",
     "https://ev.io/*?*",
     "https://staging.ev.io/*",
-    "https://staging.ev.io/*?*"
+    "https://staging.ev.io/*?*",
+    "https://www.ev.io/*",
+    "https://www.ev.io/*?*"
    ],
    "run_at": "document_start",
    "js": [
