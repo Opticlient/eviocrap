@@ -181,7 +181,7 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  });
  window.addEventListener("load", () => {
   const element = document.createElement("style");
-  element.innerText = "img{image-rendering:pixelated}";
+  element.innerText = "img{image-rendering:pixelated}span.clan_insignia_scoreboard>a>img{image-rendering:auto}";
   document.head.appendChild(element);
  });
 })();
