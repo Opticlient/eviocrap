@@ -20,6 +20,14 @@ window.client = true;
 })();
 
 const doNothing = function() {},
+fakePromise = (() => {
+ const samePromise = function() { return fakePromise };
+ return {
+  then: samePromise,
+  catch: samePromise,
+  finally: samePromise,
+ };
+})(),
 saveData = () => localStorage.setItem("opticlient", JSON.stringify(ls)),
 ls = JSON.parse(localStorage.getItem("opticlient"));
 
@@ -696,8 +704,20 @@ ls = JSON.parse(localStorage.getItem("opticlient"));
  const prev = navigator.serviceWorker.register;
  navigator.serviceWorker.register = function() {
   navigator.serviceWorker.register = prev;
-  return { then: doNothing };
+  return fakePromise;
  };
+})();
+
+//fixed scoreboard audio bug
+(() => {
+ window.addEventListener("load", () => {
+  if (window.ramp) {
+   const doThing = () => fakePromise;
+   if (!ramp.addUnits) ramp.addUnits = doThing;
+   if (!ramp.displayUnits) ramp.displayUnits = doThing;
+   if (!ramp.triggerRefresh) ramp.triggerRefresh = doThing;
+  };
+ });
 })();
 
 //version control for opticlient (DO NOT DISTRIBUTE!!! (no longer needed))
